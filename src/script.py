@@ -38,5 +38,14 @@ def parser(result, error):
     return result_dict
 
 
+def filter(result_dict):
+    filtered = []
+    for value in result_dict:
+        if float(value['Transfer']) > 65 and float(value['Bitrate']) > 650:
+            filtered.append(value)
+    return filtered
+
+
 result, error = client(server_ip)
-parser(result.decode(decode_format), error.decode(decode_format))
+result_dict = parser(result.decode(decode_format), error.decode(decode_format))
+print(filter(result_dict))
