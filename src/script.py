@@ -21,7 +21,7 @@ def parser(result, error):
     result = re.sub("\[.*\]", "", result.strip())
     lines = result.split("\n")
     for line in lines:
-        if re.search("^\D*$", line):
+        if re.search("^\D*$", line) and line:
             result = re.sub(line, "*", result)
     res_section = result.split("*")[1].strip()
     lines = res_section.split("\n")
