@@ -16,8 +16,7 @@ def client(server_ip):
 
 def parser(result, error):
     if error:
-        print(error)
-        return
+        return (None, error)
     result = re.sub("\[.*\]", "", result.strip())
     lines = result.split("\n")
     for line in lines:
@@ -35,17 +34,18 @@ def parser(result, error):
         line_dict['Retr'] = params[6]
         line_dict['Cwnd'] = params[7]
         result_dict.append(line_dict)
-    return result_dict
+    return (result_dict, None)
 
 
-def filter(result_dict):
-    filtered = []
-    for value in result_dict:
-        if float(value['Transfer']) > 65 and float(value['Bitrate']) > 650:
-            filtered.append(value)
-    return filtered
+def print_filtered(result_dict, error):
+    if error:
+        print(error)
+    else:
+        for value in result_dict:
+            if float(value['Transfer']) > 65 and float(value['Bitrate']) > 650:
+                print(value)
 
 
 result, error = client(server_ip)
-result_dict = parser(result.decode(decode_format), error.decode(decode_format))
-print(filter(result_dict))
+result_dict, error = parser(result.decode(decode_format), error.decode(decode_format))
+print_filtered(result_dict, error)
